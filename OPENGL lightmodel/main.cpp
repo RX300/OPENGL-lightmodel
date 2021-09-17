@@ -115,7 +115,7 @@ int
 main(int argc, char** argv)
 {
 	glfwInit();
-	GLFWwindow* window = glfwCreateWindow(800, 800, "Te", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(800, 900, "Te", NULL, NULL);
 
 	glfwMakeContextCurrent(window);
 	gl3wInit();
