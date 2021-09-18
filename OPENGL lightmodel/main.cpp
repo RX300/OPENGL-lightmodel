@@ -25,8 +25,12 @@ int windowHeight = 512; // 窗口高
 
 bool keyboardState[1024];   // 键盘状态数组 keyboardState[x]==true 表示按下x键
 
+float starttime,stoptime;
 
-
+unsigned int apptime()
+{
+	return (unsigned int)(GetTickCount64() - starttime);
+}
 
 void
 init(void)
@@ -61,6 +65,7 @@ init(void)
 void
 display(void)
 {
+	float time = float(apptime() & 0xFFFF) / float(0xFFFF);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);       // 清空窗口颜色缓存
 
 	// 传模型变换矩阵
@@ -114,8 +119,9 @@ display(void)
 int
 main(int argc, char** argv)
 {
+	starttime = GetTickCount64();
 	glfwInit();
-	GLFWwindow* window = glfwCreateWindow(800, 800, "Te", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(1080, 1080, "Te", NULL, NULL);
 
 	glfwMakeContextCurrent(window);
 	gl3wInit();
