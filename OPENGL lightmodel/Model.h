@@ -35,24 +35,24 @@ public:
             for (int j = 0; j < aimesh->mNumVertices; j++)
             {
                 // 顶点
-                glm::vec3 vvv;
-                vvv.x = aimesh->mVertices[j].x;
-                vvv.y = aimesh->mVertices[j].y;
-                vvv.z = aimesh->mVertices[j].z;
+                vmath::vec3 vvv;
+                vvv[0] = aimesh->mVertices[j].x;
+                vvv[1] = aimesh->mVertices[j].y;
+                vvv[2] = aimesh->mVertices[j].z;
                 mesh.vertexPosition.push_back(vvv);
 
                 // 法线
-                vvv.x = aimesh->mNormals[j].x;
-                vvv.y = aimesh->mNormals[j].y;
-                vvv.z = aimesh->mNormals[j].z;
+                vvv[0] = aimesh->mNormals[j].x;
+                vvv[1] = aimesh->mNormals[j].y;
+                vvv[2] = aimesh->mNormals[j].z;
                 mesh.vertexNormal.push_back(vvv);
 
                 // 纹理坐标: 如果存在则加入。assimp 默认可以有多个纹理坐标 我们取第一个（0）即可
-                glm::vec2 vv(0, 0);
+                vmath::vec2 vv(0, 0);
                 if (aimesh->mTextureCoords[0])
                 {
-                    vv.x = aimesh->mTextureCoords[0][j].x;
-                    vv.y = aimesh->mTextureCoords[0][j].y;
+                    vv[0] = aimesh->mTextureCoords[0][j].x;
+                    vv[1] = aimesh->mTextureCoords[0][j].y;
                 }
                 mesh.vertexTexcoord.push_back(vv);
             }

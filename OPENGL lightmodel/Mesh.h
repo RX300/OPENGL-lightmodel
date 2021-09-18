@@ -9,9 +9,9 @@ public:
     GLuint diffuseTexture;  // 漫反射纹理
 
     // 顶点属性
-    std::vector<glm::vec3> vertexPosition;
-    std::vector<glm::vec2> vertexTexcoord;
-    std::vector<glm::vec3> vertexNormal;
+    std::vector<vmath::vec3> vertexPosition;
+    std::vector<vmath::vec2> vertexTexcoord;
+    std::vector<vmath::vec3> vertexNormal;
 
     // glDrawElements 函数的绘制索引
     std::vector<int> index;
@@ -27,26 +27,26 @@ public:
         glGenBuffers(1, &vbo);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glBufferData(GL_ARRAY_BUFFER,
-            vertexPosition.size() * sizeof(glm::vec3) +
-            vertexTexcoord.size() * sizeof(glm::vec2) +
-            vertexNormal.size() * sizeof(glm::vec3),
+            vertexPosition.size() * sizeof(vmath::vec3) +
+            vertexTexcoord.size() * sizeof(vmath::vec2) +
+            vertexNormal.size() * sizeof(vmath::vec3),
             NULL, GL_STATIC_DRAW);
 
         // 传位置
         GLuint offset_position = 0;
-        GLuint size_position = vertexPosition.size() * sizeof(glm::vec3);
+        GLuint size_position = vertexPosition.size() * sizeof(vmath::vec3);
         glBufferSubData(GL_ARRAY_BUFFER, offset_position, size_position, vertexPosition.data());
         glEnableVertexAttribArray(0);   // 着色器中 (layout = 0) 表示顶点位置
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)(offset_position));
         // 传纹理坐标
         GLuint offset_texcoord = size_position;
-        GLuint size_texcoord = vertexTexcoord.size() * sizeof(glm::vec2);
+        GLuint size_texcoord = vertexTexcoord.size() * sizeof(vmath::vec2);
         glBufferSubData(GL_ARRAY_BUFFER, offset_texcoord, size_texcoord, vertexTexcoord.data());
         glEnableVertexAttribArray(1);   // 着色器中 (layout = 1) 表示纹理坐标
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid*)(offset_texcoord));
         // 传法线
         GLuint offset_normal = size_position + size_texcoord;
-        GLuint size_normal = vertexNormal.size() * sizeof(glm::vec3);
+        GLuint size_normal = vertexNormal.size() * sizeof(vmath::vec3);
         glBufferSubData(GL_ARRAY_BUFFER, offset_normal, size_normal, vertexNormal.data());
         glEnableVertexAttribArray(2);   // 着色器中 (layout = 2) 表示法线
         glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)(offset_normal));
