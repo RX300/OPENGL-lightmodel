@@ -10,9 +10,9 @@ Model myModel;
 GLuint program;
 
 // 相机参数
-glm::vec3 cameraPosition(0, 0, 0);      // 相机位置
-glm::vec3 cameraDirection(0, 0, -1);    // 相机视线方向
-glm::vec3 cameraUp(0, 1, 0);            // 世界空间下竖直向上向量
+vmath::vec3 cameraPosition(0, 0, 0);      // 相机位置
+vmath::vec3 cameraDirection(0, 0, -1);    // 相机视线方向
+vmath::vec3 cameraUp(0, 1, 0);            // 世界空间下竖直向上向量
 float pitch = 0.0f;
 float roll = 0.0f;
 float yaw = 0.0f;
@@ -73,36 +73,27 @@ display(void)
 	// 传投影矩阵
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);       // 清空窗口颜色缓存
 
-	glm::mat4 unit(   // 单位矩阵
-		glm::vec4(1, 0, 0, 0),
-		glm::vec4(0, 1, 0, 0),
-		glm::vec4(0, 0, 1, 0),
-		glm::vec4(0, 0, 0, 1)
-	);
-	glm::mat4 scale = glm::scale(unit, glm::vec3(0.05, 0.05, 0.05));
-	glm::mat4 translate = glm::translate(unit, glm::vec3(0.0, -0.5, -0.5));
-
-	// 模型变换矩阵
-	glm::mat4 model = translate * scale;
+	vmath::mat4 vmodel=vmath::translate(0.0f,-0.5f,-0.5f)*vmath::scale(0.05f)* vmath::rotate(987.0f * time * 3.14159f, vmath::vec3(0.0f, 1.0f, 0.0f));
 	GLuint mlocation = glGetUniformLocation(program, "model");    // 名为model的uniform变量的位置索引
-	glUniformMatrix4fv(mlocation, 1, GL_FALSE, glm::value_ptr(model));   // 列优先矩阵
+	glUniformMatrix4fv(mlocation, 1, GL_FALSE, vmodel);   // 列优先矩阵
+	
 
 
 
 	// 计算欧拉角以确定相机朝向
-	cameraDirection.x = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
-	cameraDirection.y = sin(glm::radians(pitch));
-	cameraDirection.z = -cos(glm::radians(pitch)) * cos(glm::radians(yaw)); // 相机看向z轴负方向
+	cameraDirection[0] = cos(vmath::radians(pitch)) * sin(vmath::radians(yaw));
+	cameraDirection[1] = sin(vmath::radians(pitch));
+	cameraDirection[2] = -cos(vmath::radians(pitch)) * cos(vmath::radians(yaw)); // 相机看向z轴负方向
 
 	// 传视图矩阵
-	glm::mat4 view = glm::lookAt(cameraPosition, cameraPosition + cameraDirection, cameraUp);
+	vmath::mat4 view = vmath::lookat(cameraPosition, cameraPosition + cameraDirection, cameraUp);
 	GLuint vlocation = glGetUniformLocation(program, "view");
-	glUniformMatrix4fv(vlocation, 1, GL_FALSE, glm::value_ptr(view));
+	glUniformMatrix4fv(vlocation, 1, GL_FALSE, view);
 
 	// 传投影矩阵
-	glm::mat4 projection = glm::perspective(glm::radians(70.0f), (GLfloat)windowWidth / (GLfloat)windowHeight, zNear, zFar);
+	vmath::mat4 projection = vmath::perspective(70.0f, (GLfloat)windowWidth / (GLfloat)windowHeight, zNear, zFar);
 	GLuint plocation = glGetUniformLocation(program, "projection");
-	glUniformMatrix4fv(plocation, 1, GL_FALSE, glm::value_ptr(projection));
+	glUniformMatrix4fv(plocation, 1, GL_FALSE, projection);
 
 	myModel.draw(program);
 
